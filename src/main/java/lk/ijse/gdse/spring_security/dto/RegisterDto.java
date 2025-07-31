@@ -1,7 +1,5 @@
 package lk.ijse.gdse.spring_security.dto;
 
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import lk.ijse.gdse.spring_security.entity.Role;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -13,8 +11,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 
-public class UserDto {
-    private Long userId;
+public class RegisterDto {
     private String userName;
     private String userPassword;
     private Role role;
