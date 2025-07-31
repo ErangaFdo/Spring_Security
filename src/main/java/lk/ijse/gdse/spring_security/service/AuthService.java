@@ -2,6 +2,8 @@ package lk.ijse.gdse.spring_security.service;
 
 import lk.ijse.gdse.spring_security.dto.AuthDto;
 import lk.ijse.gdse.spring_security.dto.AuthResponseDto;
+import lk.ijse.gdse.spring_security.dto.RegisterDto;
+import lk.ijse.gdse.spring_security.entity.Role;
 import lk.ijse.gdse.spring_security.entity.User;
 import lk.ijse.gdse.spring_security.repository.UserRepository;
 import lk.ijse.gdse.spring_security.util.JwtUtil;
@@ -27,6 +29,19 @@ public class AuthService {
 
         String token = jwtUtil.generateToken(authDto.getUsername());
         return new AuthResponseDto(token);
+    }
+
+    public String register(RegisterDto registerDTO) {
+        if (userRepository.findByUsername(registerDTO.getUserName()).isPresent()) {
+            throw new RuntimeException("Username is already exist");
+        }
+        User user = User.builder()
+                .userName(registerDTO.getUserName())
+                .userPassword((passwordEncoder.encode(registerDTO.getUserPassword()))
+                .role(Role.valueOf(registerDTO.getRole()))
+                .build();
+        userRepository.save(user);
+        return "User registered successfully";
     }
 
 }
