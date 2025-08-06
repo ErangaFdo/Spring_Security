@@ -23,7 +23,8 @@ public class AuthService {
     public AuthResponseDto authenticate(AuthDto authDto) {
         User user = userRepository.findByUserName(authDto.getUsername())
                 .orElseThrow(() -> new UsernameNotFoundException("Username not found"));
-        if (passwordEncoder.matches(authDto.getPassword(),user.getUserName())){
+
+        if (!passwordEncoder.matches(authDto.getPassword(), user.getUserPassword())) {
             throw new BadCredentialsException("Invalid Password");
         }
 
@@ -35,13 +36,14 @@ public class AuthService {
         if (userRepository.findByUserName(registerDTO.getUserName()).isPresent()) {
             throw new RuntimeException("Username is already exist");
         }
+
         User user = User.builder()
                 .userName(registerDTO.getUserName())
                 .userPassword(passwordEncoder.encode(registerDTO.getUserPassword()))
-                .role(Role.valueOf(registerDTO.getRole()))
+                .role(Role.valueOf(registerDTO.getRole().toUpperCase()))
                 .build();
+
         userRepository.save(user);
         return "User registered successfully";
     }
-
 }
