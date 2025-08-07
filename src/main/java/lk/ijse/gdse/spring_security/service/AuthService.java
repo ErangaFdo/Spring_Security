@@ -29,6 +29,8 @@ public class AuthService {
         }
 
         String token = jwtUtil.generateToken(authDto.getUsername());
+        System.out.println("Login successful for user: " + authDto.getUsername());
+        System.out.println(" Role: " + user.getRole());
         return new AuthResponseDto(token);
     }
 
